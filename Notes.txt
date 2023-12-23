@@ -1,0 +1,64 @@
+
+@MappedSuperclass
+
+
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.driverClassName=org.h2.Driver
+spring.datasource.username=sa
+spring.datasource.password=''
+spring.jpa.database-platform=org.hibernate.dialect.H2Dialect
+spring.h2.console.enabled=true
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+
+
+----- aplication.yml -----
+
+server:
+  port: 8080
+
+
+spring:
+  application:
+    name: cards
+  datasource:
+    url: jdbc:h2:mem:testdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: ''
+  h2:
+    console:
+      enabled: true
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+
+
+mvn clean install
+mvn spring-boot:build-image
+docker build . -t in60min/accounts:v1
+
+<image>
+  <name>in60min/${project.artifactId}:s4</name>
+</image>
+
+
+<plugin>
+        <groupId>com.google.cloud.tools</groupId>
+        <artifactId>jib-maven-plugin</artifactId>
+        <version>3.3.2</version>
+        <configuration>
+          <to>
+            <image>in60min/${project.artifactId}:s4</image>
+          </to>
+        </configuration>
+      </plugin>
+
+
+mvn compile jib:dockerBuild
